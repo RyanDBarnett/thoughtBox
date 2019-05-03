@@ -5,12 +5,12 @@ import CreateThought from './CreateThought.js';
 
 describe('CreateThought', () => {
 
-  it.skip('should match the snapshot', () => {
+  it('should match the snapshot', () => {
     const wrapper = shallow(<CreateThought />);
     expect(wrapper).toMatchSnapshot()
   });
 
-  it.skip('updates the state of the title field', () => {
+  it('updates the state of the title field', () => {
     const wrapper = mount(<CreateThought/>);
     const mockEvent = { target: { value: 'abc', name: 'title' } }
     const expectedState = {
@@ -21,7 +21,7 @@ describe('CreateThought', () => {
     expect(wrapper.state()).toEqual(expectedState);
   });
 
-  it.skip('updates the state of the body field', () => {
+  it('updates the state of the body field', () => {
     const wrapper = mount(<CreateThought/>);
     const mockEvent = { target: { value: 'abc', name: 'body' } }
     const expectedState = {
@@ -32,20 +32,26 @@ describe('CreateThought', () => {
     expect(wrapper.state()).toEqual(expectedState);
   });
 
-  it.skip('calls createThought prop function with the data from state as an argument, and input fields go back to empty strings', () => {
+  it('calls createThought prop function with the data from state as an argument, and input fields go back to empty strings', () => {
     const createThoughtMock = jest.fn();
+    const mockEvent = { preventDefault: jest.fn() };
+    const startState = {
+      title: 'Hi',
+      body: 'Everybody'
+    };
     const wrapper = shallow(
       <CreateThought createThought={createThoughtMock} />
     );
+    wrapper.instance().setState(startState);
     const expectedState = {
       title: '',
       body: ''
     };
 
-    // How do we call handleSubmit?
-    
-    // How do we assert that our mock was called with the
-    // correct params?
+    wrapper.instance().handleSubmit(mockEvent);
+    expect(createThoughtMock).toBeCalledWith(startState);
+    expect(wrapper.instance().state).toEqual(expectedState);
+
   });
 
 });
